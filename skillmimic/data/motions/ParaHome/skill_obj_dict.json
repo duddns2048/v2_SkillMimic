@@ -1,0 +1,9 @@
+{
+    "Move book from desk to bookshelf": {"skill_num":1, "objects":["book"]},
+    "Move cup from table to desk": {"skill_num":2, "objects":["cup"]},
+    "Move cup from desk to table": {"skill_num":3, "objects":["cup"]},
+    "Move chair from desk to table": {"skill_num":4, "objects":["chair"]},
+    "Move kettle from table to desk": {"skill_num":5, "objects":["kettle"]},
+    "Drink from cup": {"skill_num":6, "objects":["cup"]},
+    "Move pan from gas stove to table": {"skill_num":7, "objects":["pan"]}
+}

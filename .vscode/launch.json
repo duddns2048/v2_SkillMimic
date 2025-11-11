@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "SkillMimic Parahome Local Hist",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/skillmimic/run.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--experiment", "Move_kettle_from_table_to_desk",
+                "--task", "SkillMimicParahomeLocalHistRISBuffernode",
+                "--episode_length", "60",
+                "--cfg_env", "skillmimic/data/cfg/parahome_sm/parahome_place_kettle_hist60_noisyinit_simpara.yaml",
+                "--cfg_train", "skillmimic/data/cfg/train/rlg/parahome.yaml",
+                "--motion_file", "skillmimic/data/motions/ParaHome/Move_kettle_from_table_to_desk/",
+                "--reweight",
+                "--reweight_alpha", "1.0",
+                "--state_init_random_prob", "0.1",
+                "--state_switch_prob", "0.0",
+                "--hist_length", "60",
+                "--history_embedding_size", "3",
+                "--hist_ckpt", "hist_encoder/ParaHome/hist_model.ckpt",
+                "--obj_trans", "/home/kimyw/github/v2_SkillMimic/seq/s110/object_transformations.pkl"
+            ]
+        }
+    ]
+}

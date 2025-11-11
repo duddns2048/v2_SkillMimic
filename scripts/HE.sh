@@ -1,0 +1,1 @@
+python -m skillmimic.utils.state_prediction_parahome --motion_dir skillmimic/data/motions/ParaHome
