@@ -14,6 +14,7 @@ CUDA_VISIBLE_DEVICES=3 python skillmimic/run.py \
   --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s79/object_transformations.pkl \
   --headless \
   --resume_from output/Move_cup_from_desk_to_table_12-08-42-07/nn/Move_cup_from_desk_to_table_e741_r17.1350.pth
+  # --wandb_id
 
     # parahome_place_kettle_hist60_noisyinit_simpara.yaml 
     #   in_scene_obj_static

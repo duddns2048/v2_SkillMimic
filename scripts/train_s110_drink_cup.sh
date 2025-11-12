@@ -14,6 +14,7 @@ CUDA_VISIBLE_DEVICES=6 python skillmimic/run.py \
   --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s110/object_transformations.pkl \
   --headless \
   --resume_from output/Drink_from_cup_12-08-44-17/nn/Drink_from_cup_e1825_r19.5359.pth
+  # --wandb_id
 
     # parahome_place_kettle_hist60_noisyinit_simpara.yaml 
     #   in_scene_obj_static

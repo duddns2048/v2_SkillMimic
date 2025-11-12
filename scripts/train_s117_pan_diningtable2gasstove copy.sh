@@ -14,6 +14,7 @@ CUDA_VISIBLE_DEVICES=7 python skillmimic/run.py \
   --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s117/object_transformations.pkl \
   --headless \
   --resume_from output/Move_pan_from_gas_stove_to_table_12-08-47-19/nn/Move_pan_from_gas_stove_to_table_e332_r11.1825.pth
+  # --wandb_id
 
     # parahome_place_kettle_hist60_noisyinit_simpara.yaml 
     #   in_scene_obj_static

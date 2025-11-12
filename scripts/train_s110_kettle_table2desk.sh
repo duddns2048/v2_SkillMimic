@@ -14,6 +14,7 @@ CUDA_VISIBLE_DEVICES=5 python skillmimic/run.py \
   --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s110/object_transformations.pkl \
   --headless \
   --resume_from output/Move_kettle_from_table_to_desk_12-08-43-31/nn/Move_kettle_from_table_to_desk_e2148_r13.1123.pth
+  # --wandb_id
 
     # parahome_place_kettle_hist60_noisyinit_simpara.yaml 
     #   in_scene_obj_static

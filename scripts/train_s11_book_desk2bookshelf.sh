@@ -14,7 +14,8 @@ CUDA_VISIBLE_DEVICES=1 python skillmimic/run.py \
   --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s11/object_transformations.pkl \
   --headless
   # --resume_from
-  
+  # --wandb_id
+
 
     # parahome_place_kettle_hist60_noisyinit_simpara.yaml 
     #   in_scene_obj_static
