@@ -72,6 +72,13 @@ class SkillMimicAgent(common_agent.CommonAgent):
         self.resume_from = config['resume_from']
         self.done_indices = []
 
+        self.current_rewards_rb = torch.zeros((self.num_agents * self.num_actors, self.value_size), dtype=torch.float32, device=self.ppo_device)
+        self.current_rewards_ro = torch.zeros((self.num_agents * self.num_actors, self.value_size), dtype=torch.float32, device=self.ppo_device)
+        self.current_rewards_rig = torch.zeros((self.num_agents * self.num_actors, self.value_size), dtype=torch.float32, device=self.ppo_device)
+
+        self.game_rewards_rb = torch_ext.AverageMeter(self.value_size, self.games_to_track).to(self.ppo_device)
+        self.game_rewards_ro = torch_ext.AverageMeter(self.value_size, self.games_to_track).to(self.ppo_device)
+        self.game_rewards_rig = torch_ext.AverageMeter(self.value_size, self.games_to_track).to(self.ppo_device)
         return
 
     def train(self):
@@ -115,6 +122,7 @@ class SkillMimicAgent(common_agent.CommonAgent):
     def restore(self, fn):
         checkpoint = torch_ext.load_checkpoint(fn)
         self.model.load_state_dict(checkpoint['model'])
+        self.epoch_num = checkpoint['epoch']
         if self.normalize_input:
             self.running_mean_std.load_state_dict(checkpoint['running_mean_std'])
         if self._normalize_input:
@@ -144,7 +152,9 @@ class SkillMimicAgent(common_agent.CommonAgent):
             if self.has_central_value:
                 self.experience_buffer.update_data('states', n, self.obs['states'])
 
-            self.obs, rewards, self.dones, infos = self.env_step(res_dict['actions'])
+            self.obs, rewards_dict, self.dones, infos = self.env_step(res_dict['actions'])
+            rewards = rewards_dict['rew_buf']
+
             shaped_rewards = self.rewards_shaper(rewards)
             self.experience_buffer.update_data('rewards', n, shaped_rewards)
             self.experience_buffer.update_data('next_obses', n, self.obs['obs'])
@@ -158,17 +168,26 @@ class SkillMimicAgent(common_agent.CommonAgent):
             self.experience_buffer.update_data('next_values', n, next_vals)
 
             self.current_rewards += rewards
+            self.current_rewards_rb += rewards_dict['rb_buf']
+            self.current_rewards_ro += rewards_dict['ro_buf']
+            self.current_rewards_rig += rewards_dict['rig_buf']
             self.current_lengths += 1
             all_done_indices = self.dones.nonzero(as_tuple=False)
             self.done_indices = all_done_indices[::self.num_agents]
   
             self.game_rewards.update(self.current_rewards[self.done_indices])
+            self.game_rewards_rb.update(self.current_rewards_rb[self.done_indices])
+            self.game_rewards_ro.update(self.current_rewards_ro[self.done_indices])
+            self.game_rewards_rig.update(self.current_rewards_rig[self.done_indices])
             self.game_lengths.update(self.current_lengths[self.done_indices])
             self.algo_observer.process_infos(infos, self.done_indices)
 
             not_dones = 1.0 - self.dones.float()
 
             self.current_rewards = self.current_rewards * not_dones.unsqueeze(1)
+            self.current_rewards_rb = self.current_rewards_rb * not_dones.unsqueeze(1)
+            self.current_rewards_ro = self.current_rewards_ro * not_dones.unsqueeze(1)
+            self.current_rewards_rig = self.current_rewards_rig * not_dones.unsqueeze(1)
             self.current_lengths = self.current_lengths * not_dones
             
             # if (self.vec_env.env.task.viewer):
@@ -188,6 +207,7 @@ class SkillMimicAgent(common_agent.CommonAgent):
         batch_dict = self.experience_buffer.get_transformed_list(a2c_common.swap_and_flatten01, self.tensor_list)
         batch_dict['returns'] = a2c_common.swap_and_flatten01(mb_returns)
         batch_dict['played_frames'] = self.batch_size
+        batch_dict['mb_rewards'] = mb_rewards  # Store original rewards for logging
 
         return batch_dict
 
@@ -302,18 +322,18 @@ class SkillMimicAgent(common_agent.CommonAgent):
         # Log reward components to wandb (epoch average)
         if wandb.run is not None:
             # Extract reward components from the environment
-            if hasattr(self.vec_env.env, 'rb_buf'):
-                rb_mean = self.vec_env.env.rb_buf.mean().item()
-                ro_mean = self.vec_env.env.ro_buf.mean().item()
-                rig_mean = self.vec_env.env.rig_buf.mean().item()
-                total_reward_mean = batch_dict['rewards'].mean().item()
+            if hasattr(self.vec_env.env, 'task') and hasattr(self.vec_env.env.task, 'rb_buf'):
+                rb_mean = self.vec_env.env.task.rb_buf.mean().item()
+                ro_mean = self.vec_env.env.task.ro_buf.mean().item()
+                rig_mean = self.vec_env.env.task.rig_buf.mean().item()
+                total_reward_mean = batch_dict.get('mb_rewards', batch_dict.get('rewards')).mean().item()
 
                 wandb.log({
                     'epoch': self.epoch_num,
-                    'rewards/total_reward': total_reward_mean,
-                    'rewards/rb': rb_mean,
-                    'rewards/ro': ro_mean,
-                    'rewards/rig': rig_mean,
+                    'rewards/rb': self._get_mean_rewards_rb(),
+                    'rewards/ro': self._get_mean_rewards_ro(),
+                    'rewards/rig': self._get_mean_rewards_rig(),
+                    'rewards/total_reward': self._get_mean_rewards(),
                 }, step=self.epoch_num)
 
         return train_info

@@ -340,7 +340,9 @@ def get_args(benchmark=False):
         {"name": "--disable_time_reweight", "action": "store_true", "default": False,
             "help": "Disable the Time-level reweight."},
         {"name": "--obj_trans", "type": str, "default": "",
-            "help": "Specify the object transformation file path to override the config file"}
+            "help": "Specify the object transformation file path to override the config file"},
+        {"name": "--wandb_id", "type": str, "default": "",
+            "help": "Specify the wandb_id when resume the logging"}
             
 
 

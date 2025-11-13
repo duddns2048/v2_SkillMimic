@@ -250,6 +250,9 @@ class SkillMimicParahomeLocalHistRISBuffernode(SkillMimicParahomeLocalHistRIS):
                 buffer_motion_id = self.motion_ids_total[buffer_env_id].item()
                 indices = (self.motion_ids_total == buffer_motion_id)
                 self.rew_buf[buffer_env_id] = self.rew_buf[indices].mean().item()
+                self.rb_buf[buffer_env_id] = self.rb_buf[indices].mean().item()
+                self.ro_buf[buffer_env_id] = self.ro_buf[indices].mean().item()
+                self.rig_buf[buffer_env_id] = self.rig_buf[indices].mean().item()
                 
         self.buffer_steps = torch.where(self.buffer_steps > 0, self.buffer_steps - 1, self.buffer_steps)
         return

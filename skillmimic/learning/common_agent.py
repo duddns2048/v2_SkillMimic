@@ -528,6 +528,15 @@ class CommonAgent(a2c_continuous.A2CAgent):
     def _get_mean_rewards(self):
         return self.game_rewards.get_mean()
 
+    def _get_mean_rewards_rb(self):
+        return self.game_rewards_rb.get_mean()
+
+    def _get_mean_rewards_ro(self):
+        return self.game_rewards_ro.get_mean()
+
+    def _get_mean_rewards_rig(self):
+        return self.game_rewards_rig.get_mean()
+
     def _load_config_params(self, config):
         self.last_lr = config['learning_rate']
         return

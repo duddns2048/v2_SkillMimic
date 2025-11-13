@@ -1,26 +1,28 @@
-CUDA_VISIBLE_DEVICES=3 python skillmimic/run.py \
-  --experiment Move_cup_from_desk_to_table\
+CUDA_VISIBLE_DEVICES=7 python skillmimic/run.py \
+  --seed 7394\
+  --experiment Move_pan_from_gas_stove_to_table\
   --task  SkillMimicParahomeLocalHistRISBuffernode\
   --episode_length 60 \
-  --cfg_env skillmimic/data/cfg/parahome_sm/parahome_s79_cup_desk2table_hist60_noisyinit_simpara.yaml \
+  --cfg_env skillmimic/data/cfg/parahome_sm/parahome_s117_pan_diningtable2gasstove_hist60_noisyinit_simpara.yaml \
   --cfg_train skillmimic/data/cfg/train/rlg/parahome.yaml \
-  --motion_file skillmimic/data/motions/ParaHome/Move_cup_from_desk_to_table/ \
+  --motion_file skillmimic/data/motions/ParaHome/Move_pan_from_gas_stove_to_table/ \
   --reweight --reweight_alpha 1.0 \
   --state_init_random_prob 0.1 \
   --state_switch_prob 0.0 \
   --hist_length 60 \
   --history_embedding_size 3 \
   --hist_ckpt hist_encoder/ParaHome/hist_model.ckpt \
-  --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s79/object_transformations.pkl \
+  --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s117/object_transformations.pkl \
   --headless \
-  --resume_from output/Move_cup_from_desk_to_table_12-08-42-07/nn/Move_cup_from_desk_to_table_e741_r17.1350.pth
-  # --wandb_id
+  --resume_from output/Move_chair_from_desk_to_table_12-08-42-42/nn/Move_chair_from_desk_to_table.pth\
+  --wandb_id g7pxf5a7
 
     # parahome_place_kettle_hist60_noisyinit_simpara.yaml 
     #   in_scene_obj_static
     #   in_scene_obj_dynamic
     # --experiment
     # --obj_trans
+    # --resume_from
     # --motion_file skillmimic/data/motions/Drink_from_cup/ \
     # --motion_file skillmimic/data/motions/Move_book_from_desk_to_bookshelf/ \
     # --motion_file skillmimic/data/motions/Move_chair_from_desk_to_table/ \

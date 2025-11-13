@@ -497,7 +497,7 @@ class HumanoidWholeBody(BaseTask):
 
     def render(self, sync_frame_time=False):
         if self.viewer:
-            self._update_camera()
+            # self._update_camera()
             self._draw_task()
 
         super().render(sync_frame_time)

@@ -321,10 +321,10 @@ def main():
 
     # Initialize wandb
     if not args.test:
-        wandb.init(
-            project="intermimic",
-            name=f"{args.experiment}",
-            config={
+        init_kwargs = {
+            "project": "intermimic",
+            "name": f"{args.experiment}",
+            "config": {
                 "task": args.task,
                 "motion_file": args.motion_file,
                 "num_envs": cfg['env']['numEnvs'],
@@ -332,8 +332,14 @@ def main():
                 "reweight": cfg['env']['reweight'],
                 "reweight_alpha": cfg['env']['reweight_alpha'],
                 **cfg_train['params']['config']
-            }
-        )
+            }}
+
+        if hasattr(args, 'wandb_id') and args.wandb_id:
+            # args.wandb_id가 주어졌다면, 해당 ID로 이어서(resume) 로깅하도록 설정
+            init_kwargs['id'] = args.wandb_id
+            init_kwargs['resume'] = "must"
+
+        wandb.init(**init_kwargs)
 
     algo_observer = RLGPUAlgoObserver()
 

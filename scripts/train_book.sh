@@ -1,4 +1,5 @@
 CUDA_VISIBLE_DEVICES=1 python skillmimic/run.py \
+  --seed 2025 \
   --experiment Move_book_from_desk_to_bookshelf\
   --task  SkillMimicParahomeLocalHistRISBuffernode\
   --episode_length 60 \
@@ -12,9 +13,9 @@ CUDA_VISIBLE_DEVICES=1 python skillmimic/run.py \
   --history_embedding_size 3 \
   --hist_ckpt hist_encoder/ParaHome/hist_model.ckpt \
   --obj_trans /home/youngwoon/github/v2_SkillMimic/seq/s11/object_transformations.pkl \
-  --headless
-  # --resume_from
-  # --wandb_id
+  --headless \
+  --resume_from output/Move_book_from_desk_to_bookshelf_13-06-49-08/nn/Move_book_from_desk_to_bookshelf.pth\
+  --wandb_id gzylp4zx
 
 
     # parahome_place_kettle_hist60_noisyinit_simpara.yaml 
@@ -29,3 +30,5 @@ CUDA_VISIBLE_DEVICES=1 python skillmimic/run.py \
     # --motion_file skillmimic/data/motions/Move_cup_from_table_to_desk/ \
     # --motion_file skillmimic/data/motions/Move_kettle_from_table_to_desk/ \
     # --motion_file skillmimic/data/motions/Move_pan_from_gas_stove_to_table/ \
+
+    # https://wandb.ai/SceneMimic/intermimic/runs/gzylp4zx

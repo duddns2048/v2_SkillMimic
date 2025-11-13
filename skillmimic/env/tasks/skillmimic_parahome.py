@@ -69,10 +69,7 @@ class SkillMimicParahome(HumanoidWholeBodyWithObjectParahome):
         self._hist_obs = torch.zeros((self.num_envs, self.ref_hoi_obs_size), device=self.device, dtype=torch.float)
         self._tar_pos = torch.zeros([self.num_envs, 3], device=self.device, dtype=torch.float)
 
-        # Reward components for logging
-        self.rb_buf = torch.zeros(self.num_envs, device=self.device, dtype=torch.float)
-        self.ro_buf = torch.zeros(self.num_envs, device=self.device, dtype=torch.float)
-        self.rig_buf = torch.zeros(self.num_envs, device=self.device, dtype=torch.float)
+
         
         # get the label of the skill
         # skill_number = int(os.listdir(self.motion_file)[0].split('_')[0])

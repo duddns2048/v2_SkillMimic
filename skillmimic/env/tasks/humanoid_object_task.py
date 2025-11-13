@@ -224,9 +224,15 @@ class HumanoidWholeBodyWithObject(HumanoidWholeBody): #metric
         self._reset_target(env_ids)
         return
 
-    def _reset_target(self, env_ids):
+    def _reset_target(self, env_ids): # 위치, dnlcl
         # self.init_obj_pos[env_ids, 2] += 8
         self._target_states[env_ids, :3] = self.init_obj_pos[env_ids]#.clone()+0.5
+        if self.cfg['env']['in_scene_obj_dynamic'][0] =='pan':
+            print('*^&%$^book offset')
+            self._target_states[env_ids, 2] += 0.15 # pan
+        if self.cfg['env']['in_scene_obj_dynamic'][0] =='book':
+            # print('*^&%$^book offset')
+            self._target_states[env_ids, 2] += 0.1 # book
         self._target_states[env_ids, 3:7] = self.init_obj_rot[env_ids]#.clone() #rand_rot
         self._target_states[env_ids, 7:10] = self.init_obj_pos_vel[env_ids]#.clone()
         self._target_states[env_ids, 10:13] = self.init_obj_rot_vel[env_ids]
@@ -496,7 +502,7 @@ class HumanoidWholeBodyWithObjectParahome(HumanoidWholeBodyWithObject): #metric
                     object_transformations = pickle.load(object_transformations)
                     desk_pose.p.x = object_transformations[0][f'{obj}_base'][0,3]
                     desk_pose.p.y = object_transformations[0][f'{obj}_base'][1,3]
-                    desk_pose.p.z = object_transformations[0][f'{obj}_base'][2,3]
+                    desk_pose.p.z = object_transformations[0][f'{obj}_base'][2,3] -0.1
                     # if obj in ["bookshelf"]:
                     #     print(f'{obj} base pose: {desk_pose.p.x, desk_pose.p.y, desk_pose.p.z}')
                     #     # all objects are placed 5cm below the base to get correct dynamic object initialization
@@ -664,7 +670,7 @@ class HumanoidWholeBodyWithObjectParahomeMultiobj(HumanoidWholeBodyWithObjectPar
         
         return
     
-    def _reset_target(self, env_ids):
+    def _reset_target(self, env_ids): # 위치
         self._target0_states[env_ids, :3] = self.init_obj0_pos[env_ids]
         self._target0_states[env_ids, 3:7] = self.init_obj0_rot[env_ids]
         self._target0_states[env_ids, 7:10] = self.init_obj0_pos_vel[env_ids]
