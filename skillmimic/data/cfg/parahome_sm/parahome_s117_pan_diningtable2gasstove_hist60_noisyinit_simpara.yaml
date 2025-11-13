@@ -55,7 +55,7 @@ env:
   enableTaskObs: False #ZC0
   state_init_random_prob: 0.1
   in_scene_obj_static: ['desk','diningtable']
-  in_scene_obj_dynamic: ['kettle']
+  in_scene_obj_dynamic: ['pan']
 
 sim:
   substeps: 2 #ZC
